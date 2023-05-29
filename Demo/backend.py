@@ -19,7 +19,7 @@ def get_prediction():
         inputMatrix = json_payload["inputMatrix"]
         inputData = np.array(inputMatrix)
 
-        model = tf.keras.models.load_model('../../CNN_ver1.h5')
+        model = tf.keras.models.load_model('../CNN_ver1.h5')
         print(inputData.shape)
         print(type(inputData[0][0][0]))
 
@@ -43,15 +43,23 @@ def get_prediction():
          'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n' 'o' 'p' 'q' 'r'
          's' 't' 'u' 'v' 'w' 'x' 'y' 'z']
         result = []
+        resultIndex = []
         
         result += [class_names[0][prediction_1st]]
         result += [class_names[0][prediction_2nd]]
         result += [class_names[0][prediction_3rd]]
         result += [class_names[0][prediction_4th]]
 
+        
+        resultIndex += [prediction_1st]
+        resultIndex += [prediction_2nd]
+        resultIndex += [prediction_3rd]
+        resultIndex += [prediction_4th]
+
         print(result)
         # Format the return data
         response_data = {"Result": result}
+        print("????")
         return jsonify(response_data)
     # exception
     except KeyError as e:

@@ -37,6 +37,16 @@
         margin-top: 10px;
       }
 
+      .image-box {
+        border: 1px solid black;
+        overflow: hidden;
+      }
+      .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       canvas {
         width: "500";
         height: "500";
@@ -88,11 +98,19 @@
         <div></div>
       </div>
       <div class="right-box">
-        <canvas id="display-board" width="500" height="500"></canvas>
+        <div class="image-box" width="500" height="500">
+          <img id="Result-0" src="./ImgResult/empty.png" alt="Image" />
+        </div>
         <div class="secondary-col">
-          <canvas id="display-board-2" width="150" height="150"></canvas>
-          <canvas id="display-board-3" width="150" height="150"></canvas>
-          <canvas id="display-board-4" width="150" height="150"></canvas>
+          <div class="image-box" width="150" height="150">
+            <img id="Result-1" src="./ImgResult/empty.png" alt="Image" />
+          </div>
+          <div class="image-box" width="150" height="150">
+            <img id="Result-2" src="./ImgResult/empty.png" alt="Image" />
+          </div>
+          <div class="image-box" width="150" height="150">
+            <img id="Result-3" src="./ImgResult/empty.png" alt="Image" />
+          </div>
         </div>
       </div>
     </div>
@@ -140,6 +158,8 @@
         function reset() {
           // Clear the canvas
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let results = ["empty", "empty", "empty", "empty"];
+          changeResult(results);
         }
 
         function submitImg() {
@@ -177,12 +197,9 @@
               const grayscale = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
               // push correct normalized value
-              if (grayscale > 250)
-              {
+              if (grayscale > 250) {
                 row.push([parseFloat(1.0)]);
-              }
-              else
-              {
+              } else {
                 row.push([parseFloat(0.0)]);
               }
             }
@@ -210,7 +227,6 @@
           // console.log(data_jason);
           // // test ===============
 
-
           fetch(url, {
             method: "POST",
             headers: {
@@ -222,11 +238,32 @@
             .then((responseData) => {
               // Access and print the 'result' field from the response
               console.log(responseData.Result);
+
+              changeResult(responseData.Result);
+              // return responseData.Result;
             })
             .catch((error) => {
               // Handle any errors that occur during the request
               console.error("Error:", error);
             });
+        }
+
+        function changeResult(resultArray) {
+          // ./ImgResult/empty.png
+          baseID = "Result-";
+          baseURL = "./ImgResult/";
+
+          for (let i = 0; i < 4; i++) {
+            var image = document.getElementById(baseID + i);
+
+            var imageUrl = baseURL + resultArray[i];
+            if (resultArray[i] >= "a" && resultArray[i] != "empty") {
+              imageUrl += "_lower";
+            }
+
+            imageUrl = imageUrl + ".png"; // Replace with the new image URL
+            image.src = imageUrl;
+          }
         }
       };
     </script>
