@@ -44,22 +44,28 @@ def get_prediction():
          's' 't' 'u' 'v' 'w' 'x' 'y' 'z']
         result = []
         resultIndex = []
+        resultProb = []
         
         result += [class_names[0][prediction_1st]]
         result += [class_names[0][prediction_2nd]]
         result += [class_names[0][prediction_3rd]]
         result += [class_names[0][prediction_4th]]
-
         
         resultIndex += [prediction_1st]
         resultIndex += [prediction_2nd]
         resultIndex += [prediction_3rd]
         resultIndex += [prediction_4th]
 
+        resultProb += [predictions[0][prediction_1st]]
+        resultProb += [predictions[0][prediction_2nd]]
+        resultProb += [predictions[0][prediction_3rd]]
+        resultProb += [predictions[0][prediction_4th]]
+        resultProb = np.array(resultProb).tolist()
+
         print(result)
+        print(resultProb)
         # Format the return data
-        response_data = {"Result": result}
-        print("????")
+        response_data = {"Result": result, "ResultProb": resultProb}
         return jsonify(response_data)
     # exception
     except KeyError as e:

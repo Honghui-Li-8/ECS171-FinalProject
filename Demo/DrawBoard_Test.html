@@ -25,7 +25,7 @@
       }
 
       .right-box {
-        width: 500px;
+        width: 800px;
         display: flex;
         flex-direction: row;
         align-items: left;
@@ -37,14 +37,42 @@
         margin-top: 10px;
       }
 
-      .image-box {
+      .image-box-1 {
+        position: relative;
         border: 1px solid black;
         overflow: hidden;
+        margin: 5px;
+        z-index: 1;
+        width: 500px;
+        height: 500px;
       }
-      .image-box img {
+      
+      .image-box-1 img {
+        position: relative;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        z-index: 2;
+        margin-top: -50px;
+      }
+
+      .image-box-2 {
+        position: relative;
+        border: 1px solid black;
+        overflow: hidden;
+        margin: 5px;
+        z-index: 1;
+        width: 150px;
+        height: 150px;
+      }
+      
+      .image-box-2 img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 2;
+        margin-top: -15px;
       }
 
       canvas {
@@ -86,6 +114,27 @@
         border-radius: 5px;
         cursor: pointer;
       }
+
+      .overlay-1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #1696b6;
+        font-size: 32px;
+        padding: 10px;
+        color: white;
+        z-index: 3;
+      }
+
+      .overlay-2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #1696b6;
+        padding: 2px;
+        color: white;
+        z-index: 3;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.14.0/dist/tf.js"></script>
   </head>
@@ -98,18 +147,28 @@
         <div></div>
       </div>
       <div class="right-box">
-        <div class="image-box" width="500" height="500">
-          <img id="Result-0" src="./ImgResult/empty.png" alt="Image" />
+        <div class="image-box-1">
+          <img id="Result-0" src="./ImgResult/empty.png" alt="Image" >
+            <div class="overlay-1">Prob = 50%</div>
+          </img>
         </div>
-        <div class="secondary-col">
-          <div class="image-box" width="150" height="150">
-            <img id="Result-1" src="./ImgResult/empty.png" alt="Image" />
+
+        
+        <div class="secondary-col" width="200">
+          <div class="image-box-2">
+            <img id="Result-1" src="./ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2">Prob = 50%</div>
+            </img>
           </div>
-          <div class="image-box" width="150" height="150">
-            <img id="Result-2" src="./ImgResult/empty.png" alt="Image" />
+          <div class="image-box-2">
+            <img id="Result-2" src="./ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2">Prob = 50%</div>
+            </img>
           </div>
-          <div class="image-box" width="150" height="150">
-            <img id="Result-3" src="./ImgResult/empty.png" alt="Image" />
+          <div class="image-box-2">
+            <img id="Result-3" src="./ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2">Prob = 50%</div>
+            </img>
           </div>
         </div>
       </div>
