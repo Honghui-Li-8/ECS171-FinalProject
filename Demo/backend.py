@@ -56,10 +56,10 @@ def get_prediction():
         resultIndex += [prediction_3rd]
         resultIndex += [prediction_4th]
 
-        resultProb += [predictions[0][prediction_1st]]
-        resultProb += [predictions[0][prediction_2nd]]
-        resultProb += [predictions[0][prediction_3rd]]
-        resultProb += [predictions[0][prediction_4th]]
+        resultProb += [round(predictions[0][prediction_1st] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_2nd] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_3rd] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
 
         print(result)
