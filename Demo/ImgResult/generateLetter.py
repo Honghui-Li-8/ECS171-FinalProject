@@ -10,7 +10,7 @@ font_size = 80
 image = Image.new('L', image_size, 255)
 draw = ImageDraw.Draw(image)
 
-font_path = "C:/Windows/Froints/BRITANIC.TTF"
+font_path = "C:/Windows/Froints/timesbd.ttf"
 font = ImageFont.truetype(font_path, font_size)
 
 class_names = ['0' '1' '2' '3' '4' '5' '6' '7' '8' '9' 'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'
