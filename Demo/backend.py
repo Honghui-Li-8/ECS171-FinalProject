@@ -1,6 +1,5 @@
 # this webpage is for hosting in internet
 from flask import Flask, request, jsonify, render_template, send_from_directory
-from PIL import Image
 import tensorflow as tf
 import numpy as np
 from flask_cors import CORS
