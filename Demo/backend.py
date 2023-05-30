@@ -1,5 +1,6 @@
 # this webpage is for hosting in internet
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
+from PIL import Image
 import tensorflow as tf
 import numpy as np
 from flask_cors import CORS
@@ -77,11 +78,20 @@ def get_prediction():
         return f'Internal server error: {e}', 500
 
 
+# Define a route to serve the images
+@app.route('/images/<path:filename>')
+def get_image(filename):
+    # Specify the path to your local image folder
+    image_folder = './ImgResult'
+    
+    # Serve the image file from the specified folder
+    return send_from_directory(image_folder, filename)
+
+
 @app.route('/')
 def handle_request():
     return 'Hello, world!'
 
-    
 @app.route('/DemoTeam14')
 def render_Demo():
     return render_template('DemoInternet.html')
