@@ -157,7 +157,7 @@
         <div class="secondary-col" width="200">
           <div class="image-box-2">
             <img id="Result-1" src="/images/empty.png" alt="Image" >
-              <div class="overlay-2" id="Prob-1">Prob = 50%</div>
+              <div class="overlay-2" id="Prob-1">Prob = 0%</div>
             </img>
           </div>
           <div class="image-box-2">
@@ -188,6 +188,38 @@
         canvas.addEventListener("mousemove", draw);
         canvas.addEventListener("mouseup", stopDrawing);
         canvas.addEventListener("mouseout", stopDrawing);
+        // Set up event listeners to track touch movements
+        canvas.addEventListener("touchmove", draw_t);
+        canvas.addEventListener("touchstart", startDrawing_t);
+        canvas.addEventListener("touchcancel", stopDrawing_t);
+        canvas.addEventListener("touchend", stopDrawing_t);
+
+        function startDrawing_t(e) {
+          e.preventDefault(); // Prevent default touch behavior
+          isDrawing = true;
+          var touch = e.touches[0];
+          var rect = canvas.getBoundingClientRect(); // Get canvas position
+          [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+        }
+
+        function draw_t(e) {
+          e.preventDefault(); // Prevent default touch behavior
+          if (!isDrawing) return;
+          var touch = e.touches[0];
+          var rect = canvas.getBoundingClientRect(); // Get canvas position
+          var x = touch.clientX - rect.left;
+          var y = touch.clientY - rect.top;
+          ctx.lineTo(x, y);
+          ctx.lineWidth = 20;
+          ctx.stroke();
+          [lastX, lastY] = [x, y];
+        }
+
+        function stopDrawing_t() {
+          isDrawing = false;
+        }
 
         function startDrawing(e) {
           isDrawing = true;
