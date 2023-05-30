@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Draw Board</title>
+    <style>
+      #container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .top-box {
+        width: 1000px;
+        height: 100px;
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+        border: 1px solid black;
+      }
+
+      .left-box {
+        width: 790px;
+        display: flex;
+        flex-direction: row;
+        align-items: right;
+      }
+
+      .right-box {
+        width: 800px;
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+      }
+
+      .secondary-col {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .image-box-1 {
+        position: relative;
+        border: 1px solid black;
+        overflow: hidden;
+        margin: 5px;
+        z-index: 1;
+        width: 500px;
+        height: 500px;
+      }
+      
+      .image-box-1 img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 2;
+        margin-top: -50px;
+      }
+
+      .image-box-2 {
+        position: relative;
+        border: 1px solid black;
+        overflow: hidden;
+        margin: 5px;
+        z-index: 1;
+        width: 150px;
+        height: 150px;
+      }
+      
+      .image-box-2 img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 2;
+        margin-top: -15px;
+      }
+
+      canvas {
+        width: "500";
+        height: "500";
+        border: 1px solid black;
+        margin: 5px;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      #empty-space {
+        flex: 1;
+        height: 100%;
+      }
+
+      #reset-btn {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #d16f42df;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #submit-btn {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #00ff1a;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .overlay-1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #1696b6;
+        font-size: 32px;
+        padding: 10px;
+        color: white;
+        z-index: 3;
+      }
+
+      .overlay-2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #1696b6;
+        padding: 2px;
+        color: white;
+        z-index: 3;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.14.0/dist/tf.js"></script>
+  </head>
+
+  <body>
+    <div class="top-box" width="500" height="500"></div>
+    <div id="container">
+      <div class="left-box">
+        <canvas id="draw-board" width="500" height="500"></canvas>
+        <div></div>
+      </div>
+      <div class="right-box">
+        <div class="image-box-1">
+          <img id="Result-0" src="../ImgResult/empty.png" alt="Image" >
+            <div class="overlay-1" id="Prob-0">Prob = 50%</div>
+          </img>
+        </div>
+
+        
+        <div class="secondary-col" width="200">
+          <div class="image-box-2">
+            <img id="Result-1" src="../ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2" id="Prob-1">Prob = 50%</div>
+            </img>
+          </div>
+          <div class="image-box-2">
+            <img id="Result-2" src="../ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2" id="Prob-2">Prob = 50%</div>
+            </img>
+          </div>
+          <div class="image-box-2">
+            <img id="Result-3" src="../ImgResult/empty.png" alt="Image" >
+              <div class="overlay-2" id="Prob-3">Prob = 50%</div>
+            </img>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button id="reset-btn">Reset</button>
+    <button id="submit-btn">Submit</button>
+    <script>
+      window.onload = function () {
+        const canvas = document.getElementById("draw-board");
+        const ctx = canvas.getContext("2d");
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Set up event listeners to track the mouse movement
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+
+        function startDrawing(e) {
+          isDrawing = true;
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+        }
+
+        function draw(e) {
+          if (!isDrawing) return;
+          ctx.lineTo(e.offsetX, e.offsetY);
+          ctx.lineWidth = 20;
+          ctx.stroke();
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function stopDrawing() {
+          isDrawing = false;
+        }
+
+        // Add event listener to reset button
+        const resetBtn = document.getElementById("reset-btn");
+        resetBtn.addEventListener("click", reset);
+        const submitBtn = document.getElementById("submit-btn");
+        submitBtn.addEventListener("click", submitImg);
+
+        function reset() {
+          // Clear the canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let results = ["empty", "empty", "empty", "empty"];
+          let probs = ["0.0", "0.0", "0.0", "0.0"];
+          changeResult(results);
+          changeProb(probs)
+        }
+
+        function submitImg() {
+          // Create a new canvas element with 100x100 dimensions
+          const exportCanvas = document.createElement("canvas");
+          const width = 100;
+          const height = 100;
+          exportCanvas.width = width;
+          exportCanvas.height = height;
+          const exportCtx = exportCanvas.getContext("2d");
+
+          // Fill the export canvas with white
+          exportCtx.fillStyle = "#FFFFFF";
+          exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+          // Draw the content of the original canvas onto the export canvas with scaling
+          exportCtx.drawImage(canvas, 0, 0, width, height);
+
+          // Get the pixel data from the export canvas
+          const imageData = exportCtx.getImageData(0, 0, width, height);
+
+          const data = imageData.data;
+
+          // Create a 3D matrix to store the grayscale values
+          const grayscaleMatrix = [];
+          for (let y = 0; y < height; y++) {
+            const row = [];
+            for (let x = 0; x < width; x++) {
+              const i = (y * width + x) * 4;
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+
+              // Calculate grayscale value using luminance formula
+              const grayscale = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+
+              // push correct normalized value
+              if (grayscale > 250) {
+                row.push([parseFloat(1.0)]);
+              } else {
+                row.push([parseFloat(0.0)]);
+              }
+            }
+            grayscaleMatrix.push(row);
+          }
+
+          // Assuming grayscaleMatrix is the 2D grayscale image matrix
+          const numRows = grayscaleMatrix.length; // Number of rows
+          const numCols = grayscaleMatrix[0].length; // Number of columns
+          const numCells = grayscaleMatrix[0][0].length; // Number of columns
+
+          console.log(`Shape: ${numRows} x ${numCols} x ${numCells}`);
+
+          getPrediction(grayscaleMatrix);
+        }
+
+        function getPrediction(inputMatrix) {
+          const url = "http://73.116.174.195:80/predict";
+          const data = {
+            inputMatrix: inputMatrix,
+          };
+
+          // // test ===============
+          // data_jason = JSON.stringify(data);
+          // console.log(data_jason);
+          // // test ===============
+
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((responseData) => {
+              // Access and print the 'result' field from the response
+              console.log(responseData.Result);
+              console.log(responseData.ResultProb);
+
+              changeResult(responseData.Result);
+              changeProb(responseData.ResultProb)
+              // return responseData.Result;
+            })
+            .catch((error) => {
+              // Handle any errors that occur during the request
+              console.error("Error:", error);
+            });
+        }
+
+        function changeResult(resultArray) {
+          // ./ImgResult/empty.png
+          baseID = "Result-";
+          baseURL = "../ImgResult/";
+
+          for (let i = 0; i < 4; i++) {
+            var image = document.getElementById(baseID + i);
+
+            var imageUrl = baseURL + resultArray[i];
+            if (resultArray[i] >= "a" && resultArray[i] != "empty") {
+              imageUrl += "_lower";
+            }
+
+            imageUrl = imageUrl + ".png"; // Replace with the new image URL
+            image.src = imageUrl;
+          }
+        }
+
+        function changeProb(probArray) {
+          // ./ImgResult/empty.png
+          baseID = "Prob-";
+
+          for (let i = 0; i < 4; i++) {
+            var probWindow = document.getElementById(baseID + i);
+            probWindow.textContent = "Prob = "+ probArray[i] + "%";
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

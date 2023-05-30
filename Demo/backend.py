@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+# this webpage is for hosting in internet
+from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 import numpy as np
 from flask_cors import CORS
@@ -76,8 +77,17 @@ def get_prediction():
         return f'Internal server error: {e}', 500
 
 
+@app.route('/')
+def handle_request():
+    return 'Hello, world!'
+
+    
+@app.route('/DemoTeam14')
+def render_Demo():
+    return render_template('DemoInternet.html')
+
 # Run the application
 if __name__ == '__main__':
     # change host to local IP address for hardware public request
     # app.run(host="172.20.10.3")
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
