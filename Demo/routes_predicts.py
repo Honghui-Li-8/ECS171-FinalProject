@@ -191,6 +191,64 @@ def get_Centered_prediction():
         return f'Internal server error: {e}', 500
 
 
+# route for Centered prediction
+@bp.route('/predict/Centered-2', methods=['POST'])
+def get_Centered2_prediction():
+    try:
+        print(type(request))
+        json_payload = request.get_json()
+
+        # unpack the request
+        inputMatrix = json_payload["inputMatrix"]
+        inputData = np.array(inputMatrix)
+
+        model = tf.keras.models.load_model('../CNN_ver3_center_new_struct.h5')
+        print(inputData.shape)
+
+        inputData_float32 = inputData.astype(np.float32)
+        input_np = centerChar(inputData_float32)
+        wraped_input = np.array([input_np])
+        predictions = model.predict(wraped_input)
+
+        # Get the indices of the largest 4 numbers
+        prediction_1st = np.argsort(predictions[0])[-1]
+        prediction_2nd = np.argsort(predictions[0])[-2]
+        prediction_3rd = np.argsort(predictions[0])[-3]
+        prediction_4th = np.argsort(predictions[0])[-4]
+
+        class_names = ['0' '1' '2' '3' '4' '5' '6' '7' '8' '9' 'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'
+         'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z'
+         'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n' 'o' 'p' 'q' 'r'
+         's' 't' 'u' 'v' 'w' 'x' 'y' 'z']
+        result = []
+        resultProb = []
+        
+        result += [class_names[0][prediction_1st]]
+        result += [class_names[0][prediction_2nd]]
+        result += [class_names[0][prediction_3rd]]
+        result += [class_names[0][prediction_4th]]
+
+        resultProb += [round(predictions[0][prediction_1st] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_2nd] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_3rd] * 100, 1)]
+        resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
+        resultProb = np.array(resultProb).tolist()
+
+        print(result)
+        print(resultProb)
+        # Format the return data
+        response_data = {"Result": result, "ResultProb": resultProb}
+        return jsonify(response_data)
+    # exception
+    except KeyError as e:
+        # Handle missing field error
+        return f'Missing field error: {e}', 400
+    except Exception as e:
+        # Handle other exceptions
+        return f'Internal server error: {e}', 500
+
+
+
 
 # route for Onehot-Encoded prediction
 @bp.route('/predict/Onehot', methods=['POST'])
