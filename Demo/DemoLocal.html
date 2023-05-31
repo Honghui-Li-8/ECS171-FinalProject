@@ -62,7 +62,7 @@
         color: #34227ccb;
       }
 
-      .dropdown {
+      #dropdown {
         width: 150px;
         height: 40px;
         font-size: 16px;
@@ -198,7 +198,7 @@
   <body>
     <div class="top-box" width="500" height="500">
       <div class="title">ECS 171-Team14: Character Recognizer</div>
-      <input  id="colorPicker" type="color"  onchange=changeBackgroundColor()>
+      <input  id="colorPicker" type="color"  onchange=changeBackgroundColor() value="#bacf88">
     </div>
 
 
@@ -215,7 +215,7 @@
 
       <div class="middle-box">
         <div class="dropdown-title">Model Selection</div>
-        <select class="dropdown">
+        <select id="dropdown">
           <option value="Compressed">Compressed</option>
           <option value="Basic">Basic 100x100</option>
           <option value="Centered">Centered Img</option>
@@ -232,7 +232,6 @@
           </img>
         </div>
 
-        
         <div class="secondary-col" width="200">
           <div class="image-box-2">
             <img id="Result-1" src="./ImgResult/empty.png" alt="Image" >
@@ -252,7 +251,12 @@
         </div>
       </div>
     </div>
+
+
     <script>
+      // change IP address
+      const IP_address = "http://127.0.0.1:5000"
+
       window.onload = function () {
         const canvas = document.getElementById("draw-board");
         const ctx = canvas.getContext("2d");
@@ -387,15 +391,11 @@
         }
 
         function getPrediction(inputMatrix) {
-          const url = "http://127.0.0.1:5000/predict";
+          var dropdown = document.getElementById("dropdown");
+          const url = IP_address + "/predict/" + dropdown.value;
           const data = {
             inputMatrix: inputMatrix,
           };
-
-          // // test ===============
-          // data_jason = JSON.stringify(data);
-          // console.log(data_jason);
-          // // test ===============
 
           fetch(url, {
             method: "POST",
@@ -451,9 +451,8 @@
 
       // color picker
       
-      window.addEventListener("DOMContentLoaded", function() {
+      window.addEventListener("load", function() {
         var colorPicker = document.getElementById("colorPicker");
-        colorPicker.value = "#bacf88b7";
         colorPicker.style.backgroundColor = "#bacf88b7";
         document.body.style.backgroundColor = "#bacf88b7";
       });
