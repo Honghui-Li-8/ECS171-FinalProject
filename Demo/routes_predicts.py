@@ -4,7 +4,9 @@ import tensorflow as tf
 import numpy as np
 
 fileCounter = 0
-filePath = "../../IncomingImg/5_30/img"
+# filePath = "../../IncomingImg/5_30/img"
+filePath = "../../0_IncomingImg/5_31/img"
+
 
 bp = Blueprint('predict', __name__)
 
