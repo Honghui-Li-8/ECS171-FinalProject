@@ -3,22 +3,35 @@
   <head>
     <title>Draw Board</title>
     <style>
+      body {
+        background-color: #bacf88b7;
+      }
+
+      .top-box {
+        width: 1000px;
+        height: 80px;
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+      }
+
+      .title {
+        font-family: Oswald;
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 18px;
+        margin-left: 10px;
+        color: #1a1a33;
+      }
+
       #container {
         display: flex;
         flex-wrap: wrap;
       }
 
-      .top-box {
-        width: 1000px;
-        height: 100px;
-        display: flex;
-        flex-direction: row;
-        align-items: left;
-        border: 1px solid black;
-      }
-
       .left-box {
-        width: 790px;
+        width: 520px;
         display: flex;
         flex-direction: row;
         align-items: right;
@@ -29,6 +42,37 @@
         display: flex;
         flex-direction: row;
         align-items: left;
+        margin-left: 10px;
+      }
+      
+      .middle-box {
+        width: 180px;
+        padding: 2px;
+      }
+      
+      .dropdown-title {
+        font-family: Arial, serif;
+        width: 180px;
+        height: 40px;
+        font-size: 22px;
+        font-weight: bold;
+        border-radius: 4px;
+        margin-left: 10px;
+        margin-top: 15px;
+        color: #34227ccb;
+      }
+
+      .dropdown {
+        width: 150px;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #9dcbffb9;
+        color: #2d2b359f;
+        border: 1px solid #000000;
+        border-radius: 4px;
+        margin-left: 20px;
+        margin-top: 5px;
       }
 
       .secondary-col {
@@ -45,6 +89,7 @@
         z-index: 1;
         width: 500px;
         height: 500px;
+        background-color: #ffffff;
       }
       
       .image-box-1 img {
@@ -64,6 +109,7 @@
         z-index: 1;
         width: 150px;
         height: 150px;
+        background-color: #ffffff;
       }
       
       .image-box-2 img {
@@ -86,6 +132,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        background-color: #ffffff;
       }
 
       #empty-space {
@@ -115,6 +162,15 @@
         cursor: pointer;
       }
 
+      #colorPicker {
+        margin-top: 25px;
+        margin-left: 25px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: #bacf88b7;
+      }
+
       .overlay-1 {
         position: absolute;
         top: 0;
@@ -140,12 +196,35 @@
   </head>
 
   <body>
-    <div class="top-box" width="500" height="500"></div>
+    <div class="top-box" width="500" height="500">
+      <div class="title">ECS 171-Team14: Character Recognizer</div>
+      <input  id="colorPicker" type="color"  onchange=changeBackgroundColor()>
+    </div>
+
+
     <div id="container">
-      <div class="left-box">
-        <canvas id="draw-board" width="500" height="500"></canvas>
-        <div></div>
+      <div>
+        <div class="left-box">
+          <canvas id="draw-board" width="500" height="500"></canvas>
+        
+        </div>
+        <button id="reset-btn">Reset</button>
+        <button id="submit-btn">Submit</button>
       </div>
+
+
+      <div class="middle-box">
+        <div class="dropdown-title">Model Selection</div>
+        <select class="dropdown">
+          <option value="Compressed">Compressed</option>
+          <option value="Basic">Basic 100x100</option>
+          <option value="Centered">Centered Img</option>
+          <option value="Onehot">Onehot Encoded</option>
+        </select>
+      </div>
+      
+
+
       <div class="right-box">
         <div class="image-box-1">
           <img id="Result-0" src="./ImgResult/empty.png" alt="Image" >
@@ -173,8 +252,6 @@
         </div>
       </div>
     </div>
-    <button id="reset-btn">Reset</button>
-    <button id="submit-btn">Submit</button>
     <script>
       window.onload = function () {
         const canvas = document.getElementById("draw-board");
@@ -371,6 +448,21 @@
           }
         }
       };
+
+      // color picker
+      
+      window.addEventListener("DOMContentLoaded", function() {
+        var colorPicker = document.getElementById("colorPicker");
+        colorPicker.value = "#bacf88b7";
+        colorPicker.style.backgroundColor = "#bacf88b7";
+        document.body.style.backgroundColor = "#bacf88b7";
+      });
+
+      function changeBackgroundColor() {
+        var colorPicker = document.getElementById("colorPicker");
+        document.body.style.backgroundColor = colorPicker.value;
+        colorPicker.style.backgroundColor = colorPicker.value;
+      }
     </script>
   </body>
 </html>
