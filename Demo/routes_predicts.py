@@ -1,7 +1,10 @@
 from flask import request, jsonify, Blueprint
+from PIL import Image
 import tensorflow as tf
 import numpy as np
 
+fileCounter = 0
+filePath = "../../IncomingImg/5_30/img"
 
 bp = Blueprint('predict', __name__)
 
@@ -60,6 +63,8 @@ def get_Compressed_prediction():
         resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
 
+        saveImage(inputData, resultProb[0])
+
         print(result)
         print(resultProb)
         # Format the return data
@@ -72,7 +77,6 @@ def get_Compressed_prediction():
     except Exception as e:
         # Handle other exceptions
         return f'Internal server error: {e}', 500
-
 
 # route for Basic prediction
 @bp.route('/predict/Basic', methods=['POST'])
@@ -119,6 +123,8 @@ def get_Basic_prediction():
         resultProb += [round(predictions[0][prediction_3rd] * 100, 1)]
         resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
+        
+        saveImage(inputData, resultProb[0])
 
         print(result)
         print(resultProb)
@@ -132,7 +138,6 @@ def get_Basic_prediction():
     except Exception as e:
         # Handle other exceptions
         return f'Internal server error: {e}', 500
-
 
 # route for Centered prediction
 @bp.route('/predict/Centered', methods=['POST'])
@@ -176,6 +181,8 @@ def get_Centered_prediction():
         resultProb += [round(predictions[0][prediction_3rd] * 100, 1)]
         resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
+        
+        saveImage(inputData, resultProb[0])
 
         print(result)
         print(resultProb)
@@ -190,8 +197,7 @@ def get_Centered_prediction():
         # Handle other exceptions
         return f'Internal server error: {e}', 500
 
-
-# route for Centered prediction
+# route for Centered-test prediction
 @bp.route('/predict/Centered-2', methods=['POST'])
 def get_Centered2_prediction():
     try:
@@ -233,6 +239,8 @@ def get_Centered2_prediction():
         resultProb += [round(predictions[0][prediction_3rd] * 100, 1)]
         resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
+        
+        saveImage(inputData, resultProb[0])
 
         print(result)
         print(resultProb)
@@ -246,9 +254,6 @@ def get_Centered2_prediction():
     except Exception as e:
         # Handle other exceptions
         return f'Internal server error: {e}', 500
-
-
-
 
 # route for Onehot-Encoded prediction
 @bp.route('/predict/Onehot', methods=['POST'])
@@ -293,6 +298,8 @@ def get_Onehot_prediction():
         resultProb += [round(predictions[0][prediction_4th] * 100, 1)]
         resultProb = np.array(resultProb).tolist()
 
+        saveImage(inputData, resultProb[0])
+
         print(result)
         print(resultProb)
         # Format the return data
@@ -308,9 +315,7 @@ def get_Onehot_prediction():
 
 
 
-
-
-
+# helper functions =================================================================================
 def centerChar(Img):
     dimension = len(Img)
     location = locatChar(Img)
@@ -353,3 +358,19 @@ def locatChar(Img):
                 if right < j:
                     right = j
     return [top, bottom, left, right]
+
+def saveImage(Img, prob):
+    global fileCounter
+    global filePath
+
+    
+    if prob > 0.2:
+        # revert normaliztion
+        Img_scaled = np.uint8(Img * 255)
+
+        image = Image.fromarray(Img_scaled.squeeze(), mode='L')
+
+        file_path = f"{filePath}_{fileCounter}.png"
+        image.save(file_path)
+        fileCounter += 1
+        print("Input saved")
