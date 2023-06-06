@@ -1,5 +1,6 @@
 ## ECS171-FinalProject - Team 14
-Letter recognition
+Topic: Letter recognition
+PRoject Report: [report]()
 
 ## Demo Instruction
 #### Frontend Webpage
@@ -16,6 +17,7 @@ Located under "Demo" folder
   - `flask` & `flask-cors` for hosting server using python, intall with "pip intsall flask" & "pip intsall flask-cors"
   - `PIL` for image processing and save local copy of collected image, intall with "pip intsall pillow"
   - `numpy` and `tensorflow` for data processing and model calling
+
 
 
 ## Model Instruction
