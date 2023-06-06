@@ -3,7 +3,9 @@ Letter recognition
 
 ### Demo Instruction
 #### Frontend Webpage
-Located under "Demo" folder, should be ready to open with any browser but need to run the backend server to be able to utilize our model and recived prediction.
+Located under "Demo" folder
+- `DemoLocal.html` should be ready to open with any browser but need to run the backend server to be able to utilize our model and recived prediction.
+- `DemoInternet.html` is under Demo/templates, is same website but hosted by server (still only work for local unless you set up the router fowrding, behaves the same)
 
 #### Backend Server
 Located under "Demo" folder
