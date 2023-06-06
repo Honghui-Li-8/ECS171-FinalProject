@@ -1,5 +1,5 @@
 ## ECS171-FinalProject - Team 14
-Topic: Letter recognition
+Topic: Letter recognition</br>
 PRoject Report: [report]()
 
 ## Demo Instruction
