@@ -20,6 +20,7 @@ Located under "Demo" folder
 
 Also, change line 257 of DemoLocal.html `const IP_address = "http://127.0.0.1:5000"` to the correct address that server is running at.
 Example terminal output when run server: =====================
+
 PS ........ECS171-FinalProject\demo> python .\backend.py
 
  \* Serving Flask app 'backend'<\br>
@@ -29,6 +30,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
  \* Running on all addresses (0.0.0.0)
  
  \* Running on http://127.0.0.1:5000
+ 
  =============================================================
 
 
