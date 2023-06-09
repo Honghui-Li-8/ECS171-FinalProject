@@ -18,6 +18,14 @@ Located under "Demo" folder
   - `PIL` for image processing and save local copy of collected image, intall with "pip intsall pillow"
   - `numpy` and `tensorflow` for data processing and model calling
 
+Also, change line 257 of DemoLocal.html `const IP_address = "http://127.0.0.1:5000"` to the correct address that server is running at.
+Example terminal output when run server:
+PS ........ECS171-FinalProject\demo> python .\backend.py
+ * Serving Flask app 'backend'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
 
 
 ## Model Instruction
